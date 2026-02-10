@@ -1,8 +1,11 @@
 package com.saishaddai.tipcalculator
 
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import com.saishaddai.tipcalculator.ui.test.TestTags
 import com.saishaddai.tipcalculator.ui.theme.TipTimeTheme
 import org.junit.Rule
 import org.junit.Test
@@ -14,21 +17,84 @@ class TipUITests {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun calculate_20_percent_tip() {
+    fun calculate_20_percent_tip_no_rounding() {
         composeTestRule.setContent {
             TipTimeTheme {
                 TipTimeLayout()
             }
         }
         composeTestRule
-            .onNodeWithText("Bill Amount")
+            .onNodeWithTag(TestTags.BILL_AMOUNT_INPUT)
             .performTextInput("10")
         composeTestRule
-            .onNodeWithText("Tip Percentage")
+            .onNodeWithTag(TestTags.TIP_PERCENTAGE_INPUT)
             .performTextInput("20")
         val expectedTip = NumberFormat.getCurrencyInstance().format(2)
-        composeTestRule.onNodeWithText("Tip Amount: $expectedTip").assertExists(
-            "No node with this text was found.")
+        composeTestRule.onNodeWithTag(TestTags.TIP_AMOUNT_DISPLAY).assertExists(
+            "No node with this text was found."
+        ).assertTextEquals("Tip Amount: $expectedTip")
+    }
+
+    @Test
+    fun calculate_0_percent_tip_no_rounding() {
+        composeTestRule.setContent {
+            TipTimeTheme {
+                TipTimeLayout()
+            }
+        }
+        composeTestRule
+            .onNodeWithTag(TestTags.BILL_AMOUNT_INPUT)
+            .performTextInput("123")
+        composeTestRule
+            .onNodeWithTag(TestTags.TIP_PERCENTAGE_INPUT)
+            .performTextInput("0")
+        val expectedTip = NumberFormat.getCurrencyInstance().format(0)
+        composeTestRule.onNodeWithTag(TestTags.TIP_AMOUNT_DISPLAY).assertExists(
+            "No node with this text was found."
+        ).assertTextEquals("Tip Amount: $expectedTip")
+    }
+
+    @Test
+    fun calculate_15_percent_tip_with_rounding() {
+        composeTestRule.setContent {
+            TipTimeTheme {
+                TipTimeLayout()
+            }
+        }
+        composeTestRule
+            .onNodeWithTag(TestTags.BILL_AMOUNT_INPUT)
+            .performTextInput("135")
+        composeTestRule
+            .onNodeWithTag(TestTags.TIP_PERCENTAGE_INPUT)
+            .performTextInput("15")
+        composeTestRule
+            .onNodeWithTag(TestTags.ROUND_UP_SWITCH)
+            .performClick()
+
+        val expectedTip = NumberFormat.getCurrencyInstance().format(20.25)
+        composeTestRule.onNodeWithTag(TestTags.TIP_AMOUNT_DISPLAY).assertExists(
+            "No node with this text was found."
+        ).assertTextEquals("Tip Amount: $expectedTip")
+    }
+
+    @Test
+    fun calculate_15_percent_tip_without_rounding() {
+        composeTestRule.setContent {
+            TipTimeTheme {
+                TipTimeLayout()
+            }
+        }
+        composeTestRule
+            .onNodeWithTag(TestTags.BILL_AMOUNT_INPUT)
+            .performTextInput("135")
+        composeTestRule
+            .onNodeWithTag(TestTags.TIP_PERCENTAGE_INPUT)
+            .performTextInput("15")
+
+        val expectedTip = NumberFormat.getCurrencyInstance().format(20.25)
+        composeTestRule.onNodeWithTag(TestTags.TIP_AMOUNT_DISPLAY).assertExists(
+            "No node with this text was found."
+        ).assertTextEquals("Tip Amount: $expectedTip")
     }
 
 }
