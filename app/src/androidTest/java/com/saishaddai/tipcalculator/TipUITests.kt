@@ -17,7 +17,7 @@ class TipUITests {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun calculate_20_percent_tip_no_rounding() {
+    fun calculate20PercentTipNoRounding() {
         composeTestRule.setContent {
             TipTimeTheme {
                 TipTimeLayout()
@@ -36,7 +36,7 @@ class TipUITests {
     }
 
     @Test
-    fun calculate_0_percent_tip_no_rounding() {
+    fun calculate0PercentTipNoRounding() {
         composeTestRule.setContent {
             TipTimeTheme {
                 TipTimeLayout()
@@ -55,7 +55,7 @@ class TipUITests {
     }
 
     @Test
-    fun calculate_15_percent_tip_with_rounding() {
+    fun calculate15PercentTipWithRounding() {
         composeTestRule.setContent {
             TipTimeTheme {
                 TipTimeLayout()
@@ -71,14 +71,14 @@ class TipUITests {
             .onNodeWithTag(TestTags.ROUND_UP_SWITCH)
             .performClick()
 
-        val expectedTip = NumberFormat.getCurrencyInstance().format(20.25)
+        val expectedTip = NumberFormat.getCurrencyInstance().format(21)
         composeTestRule.onNodeWithTag(TestTags.TIP_AMOUNT_DISPLAY).assertExists(
             "No node with this text was found."
         ).assertTextEquals("Tip Amount: $expectedTip")
     }
 
     @Test
-    fun calculate_15_percent_tip_without_rounding() {
+    fun calculate15PercentTipWithoutRounding() {
         composeTestRule.setContent {
             TipTimeTheme {
                 TipTimeLayout()
