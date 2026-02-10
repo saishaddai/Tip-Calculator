@@ -37,11 +37,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.saishaddai.tipcalculator.ui.test.TestTags
 import com.saishaddai.tipcalculator.ui.theme.TipTimeTheme
 import java.text.NumberFormat
 
@@ -90,12 +92,14 @@ fun TipTimeLayout() {
             leadingIcon = Icons.Filled.AttachMoney,
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Next),
+                imeAction = ImeAction.Next
+            ),
             value = amountInput,
             onValueChange = { amountInput = it },
             modifier = Modifier
                 .padding(bottom = 32.dp)
                 .fillMaxWidth()
+                .testTag(TestTags.BILL_AMOUNT_INPUT)
         )
         EditNumberField(
             label = R.string.how_was_the_service,
@@ -106,14 +110,21 @@ fun TipTimeLayout() {
             ),
             value = tipInput,
             onValueChange = { tipInput = it },
-            modifier = Modifier.padding(bottom = 32.dp).fillMaxWidth()
+            modifier = Modifier
+                .padding(bottom = 32.dp)
+                .fillMaxWidth()
+                .testTag(TestTags.TIP_PERCENTAGE_INPUT)
         )
         RoundTheTipRow(
             roundUp = roundUp,
             onRoundUpChanged = { roundUp = it },
-            modifier = Modifier.padding(bottom = 32.dp)
+            modifier = Modifier
+                .padding(bottom = 32.dp)
+                .testTag(TestTags.ROUND_UP_SWITCH)
         )
         Text(
+            modifier = Modifier
+                .testTag(TestTags.TIP_AMOUNT_DISPLAY),
             text = stringResource(R.string.tip_amount, tip),
             style = MaterialTheme.typography.displaySmall
         )
