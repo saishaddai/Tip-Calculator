@@ -118,9 +118,7 @@ fun TipTimeLayout() {
         RoundTheTipRow(
             roundUp = roundUp,
             onRoundUpChanged = { roundUp = it },
-            modifier = Modifier
-                .padding(bottom = 32.dp)
-                .testTag(TestTags.ROUND_UP_SWITCH)
+            modifier = Modifier.padding(bottom = 32.dp)
         )
         Text(
             modifier = Modifier
@@ -188,7 +186,8 @@ fun RoundTheTipRow(
             onCheckedChange = onRoundUpChanged,
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentWidth(Alignment.End),
+                .wrapContentWidth(Alignment.End)
+                .testTag(TestTags.ROUND_UP_SWITCH),
         )
     }
 }
